@@ -1,69 +1,85 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import EventForm from "./EventForm";
-import CreateEvent from "./createEvent";
-// import '../Style/Layout.css';
+import CreateEvent from "./CreateEvent";
 
 const Layout = () => {
-    const [list, setList] = useState([]);
-    const [displayform, setDisplayForm] = useState(false);
-
-    const [displaybutton, setDisplayButton] = useState(true);
-    const [selecteditem, setSelectedItem] = useState(null);
-
-    const handleDisplayButton = () => {
-        setDisplayButton(false);
-        setDisplayForm(true);
+  const [list, setList] = useState(() => {
+    // Load events from localStorage when the component mounts
+    try {
+      const storedEvents = localStorage.getItem("eventList");
+      return storedEvents ? JSON.parse(storedEvents) : [];
+    } catch (error) {
+      console.error("Error loading from localStorage:", error);
+      return [];
     }
+  });
 
-    const handleDisplayForm = () => {
-        setDisplayButton(true);
-        setDisplayForm(false);
-        setSelectedItem(null);
+  const [displayForm, setDisplayForm] = useState(false);
+  const [displayButton, setDisplayButton] = useState(true);
+  const [selectedItem, setSelectedItem] = useState(null);
 
+  // Save events to localStorage whenever the list changes
+  useEffect(() => {
+    try {
+      localStorage.setItem("eventList", JSON.stringify(list));
+    } catch (error) {
+      console.error("Error saving to localStorage:", error);
     }
-    
-    const addEvent = (newEvent) => {
-        setList([...list, newEvent]);
-    }
+  }, [list]);
 
-    const handleDelete = (id) =>{
-        setList(list.filter(e => e.id !==id))
-    }
+  const handleDisplayButton = () => {
+    setDisplayButton(false);
+    setDisplayForm(true);
+  };
 
-    const handleSelect = (e) => {
-        setSelectedItem(e);
-        handleDisplayButton();
-    }
-    const handleUpdateList = (updatedItem) => {
-        
-        setList(list => list.map(e => e.id === updatedItem.id ? updatedItem : e));
+  const handleDisplayForm = () => {
+    setDisplayButton(true);
+    setDisplayForm(false);
+    setSelectedItem(null);
+  };
 
-    }
-    return(
-        <div className="flex items-center">
-            <div className={`box-one ${displayform ? 'form-open' : ''}`}>
-            {!displayform && 
-                 <CreateEvent 
-                 handleDisplayButton={handleDisplayButton} 
-                 list={list} 
-                 handleDelete={handleDelete} 
-                 handleSelect={handleSelect}
-                 />
-            }
+  const addEvent = (newEvent) => {
+    setList([...list, newEvent]);
+  };
 
-            {!displaybutton && 
-                  <EventForm 
-                  addEvent={addEvent} 
-                  handleDisplayForm={handleDisplayForm} 
-                  selecteditem={selecteditem}
-                  handleUpdateList={handleUpdateList}
-                  />
-                  
-            }
+  const handleDelete = (id) => {
+    setList(list.filter((e) => e.id !== id));
+  };
 
-            </div>
-        </div>
+  const handleSelect = (e) => {
+    setSelectedItem(e);
+    handleDisplayButton();
+  };
+
+  const handleUpdateList = (updatedItem) => {
+    setList(
+     list.map((e) => (e.id === updatedItem.id ? updatedItem : e))
     );
-}
+  };
+
+  return (
+    <div className="flex items-center">
+      <div className={`box-one ${displayForm ? "form-open" : ""}`}>
+        {!displayForm && (
+          <CreateEvent
+            handleDisplayButton={handleDisplayButton}
+            list={list}
+            handleDelete={handleDelete}
+            handleSelect={handleSelect}
+          />
+        )}
+
+        {!displayButton && (
+          <EventForm
+            addEvent={addEvent}
+            handleDisplayForm={handleDisplayForm}
+            selecteditem={selectedItem}
+            handleUpdateList={handleUpdateList}
+          />
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default Layout;
