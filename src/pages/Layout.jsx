@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import EventForm from "./EventForm";
-import CreateEvent from "./CreateEvent";
+import CreateEvent from "./createEvent";
 
 const Layout = () => {
   const [list, setList] = useState(() => {
