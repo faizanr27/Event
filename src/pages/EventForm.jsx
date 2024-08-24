@@ -49,7 +49,7 @@ const EventForm = ({ addEvent, handleDisplayForm, selecteditem, handleUpdateList
             
             <Form onSubmit={handleSubmit} className="space-y-6">
             
-                <div className="bg-cont shadow-2xl rounded-lg p-6">
+                <div className="bg-gray-800 shadow-2xl rounded-lg p-6">
                 <span className="block text-xl font-semibold mb-4 text-center text-white">What's your event about?</span>
                     <div className="space-y-4">
                         <div>
