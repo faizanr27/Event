@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaCalendarDay } from "react-icons/fa";
 
 const CreateEvent = ({ handleDisplayButton, list, handleDelete, handleSelect }) => {
+  const [expandedIds, setExpandedIds] = useState([]);
+
+  const toggleDescription = (id) => {
+    setExpandedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
   return (
     <div className="container mx-auto md:min-w-96 min-w-80 p-4">
       <div className="bg-gray-800 shadow-2xl rounded-lg p-6 max-w-lg mx-auto">
@@ -23,20 +31,32 @@ const CreateEvent = ({ handleDisplayButton, list, handleDelete, handleSelect }) 
             <ul className="space-y-4">
               {list
                 .map((e) => (
-                  <li key={e.id} className="p-4 bg-slate-700 text-white rounded-lg shadow-md ">
+                  <li key={e.id} className="p-4 bg-slate-700 text-white rounded-lg shadow-md">
                     <h3 className="font-bold text-xl">{e.topic}</h3>
                     <p className="mt-1">Date: {e.date}</p>
                     <p className="mt-1">Time: {e.time}</p>
-                    <p className="mt-1 max-w-60 break-words whitespace-normal truncate line-clamp-4">Description: {e.description}</p>
+                    <p
+                      className={`mt-1 max-w-60 break-words whitespace-normal ${
+                        expandedIds.includes(e.id) ? "" : "truncate line-clamp-4"
+                      }`}
+                    >
+                      Description: {e.description}
+                    </p>
+                    <button
+                      className="text-indigo-500 hover:underline mt-2"
+                      onClick={() => toggleDescription(e.id)}
+                    >
+                      {expandedIds.includes(e.id) ? "Show less" : "Show more"}
+                    </button>
                     <div className="flex gap-2 mt-4">
                       <button
-                        className="bg-red-500 text-white px-3 py-1 rounded-xl hover:bg-red-600"
+                        className="hover:animate-bounce bg-red-500 text-white px-3 py-1 rounded-xl hover:bg-red-600"
                         onClick={() => handleDelete(e.id)}
                       >
                         Delete
                       </button>
                       <button
-                        className="bg-green-500 text-white px-3 py-1 rounded-xl hover:bg-green-600"
+                        className="hover:animate-bounce bg-green-500 text-white px-3 py-1 rounded-xl hover:bg-green-600"
                         onClick={() => handleSelect(e)}
                       >
                         Update
