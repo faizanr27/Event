@@ -3,7 +3,7 @@ import { FaCalendarDay } from "react-icons/fa";
 
 const CreateEvent = ({ handleDisplayButton, list, handleDelete, handleSelect }) => {
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto md:min-w-96 min-w-80 p-4">
       <div className="bg-gray-800 shadow-2xl rounded-lg p-6 max-w-lg mx-auto">
         <div className="sticky top-0 z-20 text-white p-4 rounded-t-lg">
           <div className="flex items-center gap-2">
@@ -18,16 +18,16 @@ const CreateEvent = ({ handleDisplayButton, list, handleDelete, handleSelect }) 
           </div>
         </div>
 
-        <div className="mt-4 h-64 overflow-y-auto scrollbar-hide">
+        <div className="mt-4 h-64 md:max-w-full max-w-60 overflow-y-scroll scrollbar-hide">
           {list.length > 0 ? (
             <ul className="space-y-4">
               {list
                 .map((e) => (
-                  <li key={e.id} className="p-4 bg-slate-700 text-white rounded-lg shadow-md">
+                  <li key={e.id} className="p-4 bg-slate-700 text-white rounded-lg shadow-md ">
                     <h3 className="font-bold text-xl">{e.topic}</h3>
                     <p className="mt-1">Date: {e.date}</p>
                     <p className="mt-1">Time: {e.time}</p>
-                    <p className="mt-1">Description: {e.description}</p>
+                    <p className="mt-1 max-w-60 break-words whitespace-normal truncate line-clamp-4">Description: {e.description}</p>
                     <div className="flex gap-2 mt-4">
                       <button
                         className="bg-red-500 text-white px-3 py-1 rounded-xl hover:bg-red-600"
